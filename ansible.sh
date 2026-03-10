@@ -1,2 +1,3 @@
-amazon-linux-extras install ansible2 -y
+sudo dnf install ansible -y
+// no need int amzone 2023
 yum install python3 python-pip python-dlevel -y
