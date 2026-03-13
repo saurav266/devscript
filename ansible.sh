@@ -38,3 +38,47 @@ run playbook
 ansible-playbook playbook.yml
 // check syntax of playbook
 ansible-playbook playbook.yml --syntax-check
+// check all information
+
+ansible all -m setup
+
+
+// palybook to deploy 
+---
+- name: Install nginx and deploy project
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy web page
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/index.html
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+// if you put the tag in playbook then you can run the playbook with tag
+ansible-playbook playbook.yml --tags "install,deploy"
+ // skip the task with tag
+ansible-playbook playbook.yml --skip-tags "install"
+
+// lookup plugin to read file content
+- name: Read file content
+  debug:
+    msg: "{{ lookup('file', '/path/to/file') }}"  
+    
