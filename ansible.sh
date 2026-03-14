@@ -82,3 +82,16 @@ ansible-playbook playbook.yml --skip-tags "install"
   debug:
     msg: "{{ lookup('file', '/path/to/file') }}"  
     
+    // asynchronous task and polling
+- name: Run long task asynchronously
+  shell: /path/to/long_task.sh
+  async: 3600
+  poll: 0 
+- name: Check result of long task
+  async_status:
+    jid: "{{ long_task_job_id }}"   
+  register: long_task_result
+  until: long_task_result.finished
+  retries: 10
+  delay: 30
+    
