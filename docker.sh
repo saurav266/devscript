@@ -150,3 +150,60 @@ docker detach web_container
 docker ps
 
 
+// volume
+// to create volume
+docker volume create my_volume
+// create volume using DOkcerfile
+FROM ubuntu:latest
+VOLUME ["volum1]
+// run container with volume
+docker build -t sk:v1
+
+docker run -it --name cont1 sk:v1
+// to see volume
+
+// craete container diffret but same volume
+ docker run -it --name cont3 --volumes-from cont1 ubuntu
+ // using comand
+ docker run -it --name cont4 -v /data ubuntu
+
+ // to see all volumes
+ cd /var/lib/docker/volumes or dcoker volume ls
+// to see volume details
+docker volume inspect my_volume
+
+// mount the volume to container
+ docker run -it --name cont7 --mount source=volume3,destination=/volume3 ubuntu
+ // or
+    docker run -it --name cont8 -v volume3:/volume3 ubuntu
+
+lsblk
+
+sudo mkfs -t ext4 /dev/nvme1n1
+// create directory to mount
+sudo mkdir /data
+// mount the volume to directory
+sudo mount /dev/nvme1n1 /data
+// to see mounted volume
+df -h
+and mount to container
+docker run -it --name cont9 -v /data:/data ubuntu
+// to see data inside container 
+docker exec -it cont9 bash
+ls /data    
+
+
+docker system df
+// to see container disk usage
+docker system df -v
+
+// create conta8iner with limited disk space
+docker run -it --name cont10 --storage-opt size=10G ubuntu
+// cpu limit
+docker run -it --name cont11 --cpus="1.5" --memory="100MB" ubuntu
+
+docker stats cont11
+// update container resource limit
+docker update --cpus="2" --memory="200MB" cont11
+
+
