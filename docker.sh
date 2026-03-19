@@ -121,3 +121,32 @@ RUN apt-get update && apt-get install -y nginx git tree
 RUN touch file1
 RUN apt install python3 -y
 CMD apt install mysql-server -y // during container creation mysql server will be installed
+
+/ thisrd Dockerfile for ENV variable
+FROM ubuntu:latest
+ENV DB_HOST localhost
+ENV DB_USER root
+ENV DB_PASS password
+EXPOSE 3306
+// insidel container we can access env variable
+CMD echo "Database Host: $DB_HOST, User: $DB_USER, Password: $
+// for website clone to github
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y apache2 git
+run apt-get install apache2-utils -y
+RUN apt clean
+COPY . /var/www/html/
+RUN SERVICE apache2 start
+EXPOSE 80
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+-D FOREGROUND: to run apache in foreground mode, so that container will not exit immediately after starting apache.
+
+run the container
+docker run -itd --name web_container -p 80:80 my_apache_image:v1
+// detach from container
+docker detach web_container
+// to see running container
+docker ps
+
+
