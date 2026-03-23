@@ -206,4 +206,44 @@ docker stats cont11
 // update container resource limit
 docker update --cpus="2" --memory="200MB" cont11
 
+// setup jenkins in docker
 
+// docker compose  install first
+sudo curl   -L "https
+
+
+// dokcer networking
+// to see all networks
+docker network ls
+// to create network
+docker network create my_network 
+// create container 
+docker run -itd --name cont12 -p 81:80 nginx:latest
+// second container
+docker run -itd --name cont13 -p 82:80 nginx:latest
+// dokcer ip address
+docker inspect cont11
+// to connect container to network
+docker network connect my_network cont12
+docker network connect my_network cont13
+// to see network details
+docker network inspect my_network
+// to ping container from another container
+docker exec cont12 ping cont13
+// to disconnect container from network
+docker network disconnect my_network cont12
+// to remove network
+docker network rm my_network
+
+// docker swarm -maaging secrets
+create file fist.txt
+docker secret create my_secret first.txt
+// to see secrets
+docker secret ls
+// to see secret details
+docker secret inspect my_secret
+// copy secret to container
+docker service create --name my_service --secret my_secret nginx:latest 
+// to see secret inside container
+docker exec -it <container_id>
+ cat /run/secrets/my_secret
