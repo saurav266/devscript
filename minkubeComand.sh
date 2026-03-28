@@ -93,6 +93,9 @@ spec:
     containers:
     - name: cont1
       image: sk/ib-image:latest
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
 // apply the deployment
 kubectl apply -f deployment.yml
 // to see the deployment
@@ -105,6 +108,8 @@ kubectl describe deployment ib-deployment
 kubectl scale deployment ib-deployment --replicas=5
 // describe
 kubectl dewcrube deploye -ib=deployment
+// delete the deployment
+kubectl delete deployment ib-deployment
 
 // edit 
 kubestl edit deploye ib-deployment
@@ -113,3 +118,14 @@ kubestl edit deploye ib-deployment
 kubectl rollout history  deployment ib-deployment
 
 kubectl rollout status  deployment ib-deployment
+
+kubectl rollout undo deployment ib-deployment
+
+// check logs of the container in the deployment
+kubectl logs deployment ib-deployment
+
+// loging into the container in the deployment
+kubectl exec -it deployment/ib-deployment -- bash
+
+.. jobs
+
