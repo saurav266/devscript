@@ -22,6 +22,15 @@ wget https://github.com/kubernetes/kops/releases/download/v1.32.0/kops-linux-amd
 chmod +x kops-linux-amd64 kubectl
 mv kubectl /usr/local/bin/kubectl
 mv kops-linux-amd64 /usr/local/bin/kops
+
+// after it
+vi .bashrc
+
+export PATH=$PATH:/usr/local/bin/
+:wq!
+
+source .bashrc
+
 aws s3api create-bucket --bucket reyaz-kops-testbkt143333.k8s.local --region ap-south-1 --create-bucket-configuration LocationConstraint=ap-south-1
 aws s3api put-bucket-versioning --bucket reyaz-kops-testbkt143333.k8s.local --region ap-south-1 --versioning-configuration Status=Enabled
 export KOPS_STATE_STORE=s3://reyaz-kops-testbkt143333.k8s.local
@@ -52,6 +61,37 @@ Suggestions:
 
 
 kops delete cluster --name reyaz.k8s.local --yes
+
+
+// create pods 
+vi deployments.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+  metadata:
+    labels:
+      app: nginx
+  spec:
+    containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+      - containerPort: 80   
+
+
+kubectl apply -f deployments.yaml
+// get pods
+kubectl get pods
+
+// which pod in which node
+kubectl get pods -o wide 
 
 
 
