@@ -337,5 +337,29 @@ helm version
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 
+// create namespace for argocd
+kubectl create namespace argocd
+// install argocd in argocd namespace
+helm install argocd argo/argo-cd -n argocd
+// check argocd pods
+kubectl get pods -n argocd
+// check argocd services
+kubectl get services -n argocd
+// port forward argocd server
+kubectl port-forward svc/argocd-server -n argocd 8080:80
+// access argocd UI
+http://localhost:8080
+// expose argocd server using load balancer
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+// get argocd server external IP
+kubectl get svc argocd-server -n argocd
 
+// yum insatll jq
+yum install jq -y 
+
+// echo $ATGOCD_SERVER
+export ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+// to get argocd admin password
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
